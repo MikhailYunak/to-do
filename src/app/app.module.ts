@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CategoriesComponent } from './views/categories/categories.component';
+import {CategoriesComponent} from './views/categories/categories.component';
+import { TasksComponent } from './views/tasks/tasks.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    TasksComponent
   ],
   imports: [
     BrowserModule,
