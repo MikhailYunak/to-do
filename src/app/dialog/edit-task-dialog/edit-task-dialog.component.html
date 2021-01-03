@@ -1,0 +1,74 @@
+<h1 mat-dialog-title>{{dialogTitle}}</h1>
+
+<div mat-dialog-content>
+
+  <mat-form-field>
+    <mat-label>Task name</mat-label>
+    <input #inputTitle matInput [(ngModel)]="tmpTitle" (keydown.enter)="onConfirm()">
+    <button mat-button *ngIf="tmpTitle.trim().length > 0"
+            (click)="tmpTitle = ''"
+            matSuffix mat-icon-button aria-label="Clear"
+            class="btn-cancel-size">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Select categories</mat-label>
+    <mat-select [(ngModel)]="tmpCategory">
+      <mat-option [value]="null">Without category</mat-option>
+      <mat-option *ngFor="let category of categories" [value]="category">
+        {{category.title}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Select priority</mat-label>
+    <mat-select [(ngModel)]="tmpPriority">
+      <mat-option [value]="null">Without priority</mat-option>
+      <mat-option *ngFor="let priority of priorities" [value]="priority">
+        {{priority.title}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input #inputDate matInput readonly [(ngModel)]="tmpDate"
+           [matDatepicker]="picker" (click)="picker.open()"
+           placeholder="Select due date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <button mat-button *ngIf="inputDate.value.trim().length > 0"
+            (click)="tmpDate = null"
+            matSuffix mat-icon-button aria-label="Clear"
+            class="btn-cancel-size">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+</div>
+
+<div mat-dialog-actions>
+  <div class="col-12 col-md-5 pb-3 pb-md-0">
+  <button mat-raised-button color="primary"
+          (click)="onConfirm()"
+          [disabled]="inputTitle.value.trim().length === 0">
+    Save
+  </button>
+  <button mat-raised-button (click)="onCancel()">Close</button>
+  </div>
+  <div class="col-12 col-md-7 text-right">
+  <button *ngIf="task.completed" mat-raised-button
+          (click)="activeTask()"
+          class="bg-yellow">
+    Activate
+  </button>
+  <button *ngIf="!task.completed" mat-raised-button
+          (click)="endTask()"
+          class="bg-green">
+    End Task
+  </button>
+  <button mat-raised-button color="warn" (click)="delete()">Delete task</button>
+  </div>
+</div>
