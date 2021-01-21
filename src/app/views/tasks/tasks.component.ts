@@ -5,6 +5,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatDialog} from '@angular/material/dialog';
 import {EditTaskDialogComponent} from '../../dialog/edit-task-dialog/edit-task-dialog.component';
+import {ConfirmDialogComponent} from '../../dialog/confirm-dialog/confirm-dialog.component';
+import {Category} from '../../model/Category';
+import {Priority} from '../../model/Priority';
 
 const COMPLETED_COLOR = '#F8F9FA';
 
@@ -21,16 +24,29 @@ export class TasksComponent implements OnInit {
 
   @Output() updateTask = new EventEmitter<Task>();
   @Output() deleteTask = new EventEmitter<Task>();
+  @Output() selectCategory = new EventEmitter<Category>();
+  @Output() filterByTitle = new EventEmitter<string>();
+  @Output() filterByStatus = new EventEmitter<boolean>();
+  @Output() filterByPriority = new EventEmitter<Priority>();
+
+  tasks: Task[];
+  priorities: Priority[];
+  displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
+  dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
+  pagesNumber = [10, 20, 50, 100];
+  searchTaskText: string;
+  selectedStatusFilter: boolean = null;
+  selectedPriorityFilter: Priority = null;
 
   @Input() set setTasks(tasks: Task[]) {
     this.tasks = tasks;
     this.fillTable();
   }
 
-  tasks: Task[];
-  displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category'];
-  dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
-  pagesNumber = [10, 20, 50, 100];
+  @Input()
+  set setPriorities(priorities: Priority[]) {
+    this.priorities = priorities;
+  }
 
   constructor(
     private dialog: MatDialog,
@@ -74,8 +90,29 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  toggleTaskCompleted(task: Task) {
+  openDeleteDialog(task: Task): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent,{
+      maxWidth: '500px',
+      data: {
+        dialogTitle: 'Confirm Action',
+        message: `Are you sure you want to delete the task: "${task.title}"?`
+      },
+      autoFocus: false
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteTask.emit(task);
+      }
+    });
+  }
+
+  onToggleStatus(task: Task): void {
     task.completed = !task.completed;
+    this.updateTask.emit(task);
+  }
+
+  showTaskByCategory(category: Category): void {
+    this.selectCategory.emit(category);
   }
 
   // в зависимости от статуса задачи - вернуть цвет названия
@@ -94,14 +131,35 @@ export class TasksComponent implements OnInit {
 
   }
 
-  // показывает задачи с применением всех текущий условий (категория, поиск, фильтры и пр.)
+  // onSelectCategory(category: Category): void {
+  //   this.selectCategory.emit(category);
+  // }
+
+  onFilterByTitle(): void {
+    this.filterByTitle.emit(this.searchTaskText);
+  }
+
+  onFilterByStatus(value: boolean): void {
+    if (value !== this.selectedStatusFilter) {
+      this.selectedStatusFilter = value;
+      this.filterByStatus.emit(this.selectedStatusFilter);
+    }
+  }
+
+  onFilterByPriority(value: Priority) {
+    if (value !== this.selectedPriorityFilter) {
+      this.selectedPriorityFilter = value;
+      this.filterByPriority.emit(this.selectedPriorityFilter);
+    }
+  }
+
   private fillTable() {
 
     if (!this.dataSource) {
       return;
     }
 
-    this.dataSource.data = this.tasks; // обновить источник данных (т.к. данные массива tasks обновились)
+    this.dataSource.data = this.tasks;
 
     this.addTableObjects();
 

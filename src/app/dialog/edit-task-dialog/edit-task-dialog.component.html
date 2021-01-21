@@ -5,10 +5,8 @@
   <mat-form-field>
     <mat-label>Task name</mat-label>
     <input #inputTitle matInput [(ngModel)]="tmpTitle" (keydown.enter)="onConfirm()">
-    <button mat-button *ngIf="tmpTitle.trim().length > 0"
-            (click)="tmpTitle = ''"
-            matSuffix mat-icon-button aria-label="Clear"
-            class="btn-cancel-size">
+    <button mat-button mat-icon-button matSuffix type="button" *ngIf="tmpTitle.trim().length > 0"
+      (click)="tmpTitle = ''" aria-label="Clear" class="btn-cancel-size">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>

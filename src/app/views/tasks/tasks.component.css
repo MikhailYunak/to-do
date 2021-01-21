@@ -7,7 +7,6 @@
   color: #b7b7b7;
 }
 
-
 .col-id {
   width: 4%;
   text-align: center;
@@ -25,7 +24,6 @@
   width: 10%;
 }
 
-
 .col-select {
   width: 3%;
 }
@@ -40,4 +38,25 @@
 
 .col-date {
   width: 10% !important;
+}
+.edit-icon,
+.delete-icon {
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.delete-icon {
+  color: #ea6561;
+}
+
+.edit-icon {
+  color: #9A9A9A;
+}
+
+.mat-header-cell {
+  font-size: 1.063rem;
+  color: #9c27b0 !important;
+  font-weight: normal;
 }

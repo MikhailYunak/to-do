@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>{{dialogTitle}}</h1>
+
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Category name (15ch)</mat-label>
+    <input #inputTitle matInput maxlength="15" [(ngModel)]="categoryTitle"
+           (keydown.enter)="onConfirm()">
+    <button mat-button *ngIf="categoryTitle.trim().length > 0"
+            (click)="categoryTitle = ''"
+            matSuffix mat-icon-button aria-label="Clear"
+            class="btn-cancel-size">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <div class="col-12 text-center text-md-left col-md-8 pb-3 p-md-0">
+    <button mat-raised-button color="primary"
+            (click)="onConfirm()"
+            [disabled]="inputTitle.value.trim().length === 0">
+      Save
+    </button>
+    <button mat-raised-button (click)="onCancel()">Close</button>
+  </div>
+  <div class="col-12 col-md-4 text-center text-md-right">
+    <button [disabled]="!canDelete" mat-raised-button color="warn" (click)="delete()">Delete</button>
+  </div>
+</div>

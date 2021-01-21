@@ -4,18 +4,38 @@
 
     Tip 2: you can also add an image using data-image tag
 -->
-  <div class="logo"><a href="http://www.creative-tim.com" class="simple-text logo-normal">
-    Categories
-  </a></div>
+  <div class="logo">
+    <h4 class="simple-text logo-normal">Categories</h4>
+  </div>
   <div class="sidebar-wrapper">
     <ul class="nav">
-      <li *ngFor="let category of categories" class="nav-item"
-          [class.active]="category === selectedCategory"
-          (click)="showTaskByCategory(category)">
+
+      <li class="nav-item" (click)="showTaskByCategory(null)"
+          [class.active]="selectedCategory === null">
         <a class="nav-link">
-          <span>{{category.title}}</span>
+          <span class="header-title">All</span>
         </a>
       </li>
+
+      <li class="nav-item">
+          <hr class="ml-3 mr-3">
+      </li>
+
+      <li *ngFor="let category of categories; let index = index" class="nav-item"
+          [class.active]="category === selectedCategory"
+          (click)="showTaskByCategory(category)"
+          (mouseenter)="showEditIcon(index)"
+          (mouseleave)="showEditIcon(null)">
+        <a class="nav-link d-flex justify-content-between">
+          <span class="d-inline-block">{{category.title}}</span>
+          <mat-icon *ngIf="indexMouseMove === index"
+                    (click)="$event.stopPropagation(); openEditDialog(category)"
+                    style="font-size: 20px; height: auto!important;">
+            edit
+          </mat-icon>
+        </a>
+      </li>
+
     </ul>
   </div>
 </div>

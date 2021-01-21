@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Category} from '../model/Category';
-import {TestData} from '../data/TestData';
-import { Task } from '../model/Task';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Task} from '../model/Task';
+import {Observable} from 'rxjs';
 import {TaskDaoArray} from '../data/dao/implementation/task-dao-array';
 import {CategoryDaoArray} from '../data/dao/implementation/category-dao-array';
 import {Priority} from '../model/Priority';
@@ -43,4 +42,11 @@ export class DataHandlerService {
     return this.taskDaoArray.delete(id);
   }
 
+  deleteCategory(id: number): Observable<Category> {
+    return this.categoryDaoArray.delete(id);
+  }
+
+  updateCategory(category: Category): Observable<Category> {
+    return this.categoryDaoArray.update(category);
+  }
 }
